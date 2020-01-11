@@ -8,7 +8,7 @@ namespace TodoWebApi.Services {
         Task<IEnumerable<TopicDto>> GetAllTopicsHandler();
         Task<TopicDto> GetTopicHandler(Guid Uuid);
         Task CreateTopicHandler(TopicDto topicDto);
-        Task UpdateTopicHandler(Guid Uuid, TopicDto topicDto);
-        Task DeleteTopicHandler(Guid Uuid);
+        Task<bool> UpdateTopicHandler(Guid Uuid, TopicDto topicDto);
+        Task<bool> DeleteTopicHandler(Guid Uuid);
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TodoWebApi.Services;
 using TodoWebApi.Services.Impl;
+using TodoWebApi.Properties;
 
 namespace TodoWebApi {
     public class Startup {
@@ -25,6 +26,10 @@ namespace TodoWebApi {
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
             services.AddSingleton<ITopicService, TopicServiceImpl>();
+
+            // requires using Microsoft.Extensions.Options
+            services.Configure<DatabaseSettings>(
+                Configuration.GetSection(nameof(DatabaseSettings)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

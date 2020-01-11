@@ -5,6 +5,6 @@ namespace TodoWebApi.Daos {
         public string Name { get; set; }
         public Guid Uuid { get; set; }
         public Guid TopicUuid { get; set; }
-
+        public DateTime Deadline { get; set; }
     }
 }
