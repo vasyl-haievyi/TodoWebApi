@@ -28,9 +28,9 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        private async Task<ActionResult> GetTopic( [FromRoute][Required] Guid Id) {
-            var result = await _service.GetTopicHandler(Id);
+        [Route("{Uuid}")]
+        private async Task<ActionResult> GetTopic( [FromRoute][Required] Guid Uuid) {
+            var result = await _service.GetTopicHandler(Uuid);
 
             return Ok(result);
         }
@@ -43,19 +43,19 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpPut]
-        [Route("{Id}")]
+        [Route("{Uuid}")]
         private async Task<ActionResult> UpdateTopic(
-            [FromRoute][Required] Guid Id,
+            [FromRoute][Required] Guid Uuid,
             [FromBody][Required] TopicDto topicDto) {
-            await _service.UpdateTopicHandler(Id, topicDto);
+            await _service.UpdateTopicHandler(Uuid, topicDto);
 
             return Ok();
         }
 
         [HttpDelete]
-        [Route("Id")]
-        private async Task<ActionResult> DeleteTopic([FromRoute][Required] Guid Id) {
-            await _service.DeleteTopicHandler(Id);
+        [Route("{Uuid}")]
+        private async Task<ActionResult> DeleteTopic([FromRoute][Required] Guid Uuid) {
+            await _service.DeleteTopicHandler(Uuid);
 
             return Ok();
         }

@@ -6,9 +6,9 @@ using System;
 namespace TodoWebApi.Services {
     public interface ITopicService {
         Task<IEnumerable<TopicDto>> GetAllTopicsHandler();
-        Task<TopicDto> GetTopicHandler(Guid Id);
+        Task<TopicDto> GetTopicHandler(Guid Uuid);
         Task CreateTopicHandler(TopicDto topicDto);
-        Task UpdateTopicHandler(Guid Id, TopicDto topicDto);
-        Task DeleteTopicHandler(Guid Id);
+        Task UpdateTopicHandler(Guid Uuid, TopicDto topicDto);
+        Task DeleteTopicHandler(Guid Uuid);
     }
 }
