@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using TodoWebApi.Dtos;
-using TodoWebApi.Daos;
-using MongoDB.Driver;
-using TodoWebApi.Properties;
 using System.Linq;
+using System.Threading.Tasks;
+using MongoDB.Driver;
+using TodoWebApi.Daos;
+using TodoWebApi.Dtos;
+using TodoWebApi.Properties;
 using TodoWebApi.Utils;
-using MongoDB.Bson;
 
 namespace TodoWebApi.Services.Impl {
     public class TopicServiceImpl : ITopicService {
@@ -30,7 +29,7 @@ namespace TodoWebApi.Services.Impl {
 
             await _topicsCollection.InsertOneAsync(topicDao);
 
-            foreach(var taskDto in topicDto.Tasks) {
+            foreach (var taskDto in topicDto.Tasks) {
                 var taskDao = Mapper.MapTaskDtoToDao(taskDto);
                 taskDao.Uuid = Guid.NewGuid();
                 taskDao.TopicUuid = topicDao.Uuid;
@@ -41,7 +40,7 @@ namespace TodoWebApi.Services.Impl {
 
         public async Task<bool> DeleteTopicHandler(Guid Uuid) {
             var topic = (await _topicsCollection.FindAsync(topicDao => topicDao.Uuid == Uuid)).FirstOrDefault();
-            if(topic == null) {
+            if (topic == null) {
                 return false;
             }
 
@@ -53,13 +52,13 @@ namespace TodoWebApi.Services.Impl {
         public async Task<IEnumerable<TopicDto>> GetAllTopicsHandler() {
             var daos = (await _topicsCollection.FindAsync(topic => true)).ToList();
 
-            return daos.Select( 
+            return daos.Select(
                 dao => Mapper.MapTopicDaoToDto(
-                    dao, 
+                    dao,
                     _tasksCollection
-                        .Find(task => task.TopicUuid == dao.Uuid)
-                        .ToList()
-                        .Select(dao => Mapper.MapTaskDaoToDto(dao))
+                    .Find(task => task.TopicUuid == dao.Uuid)
+                    .ToList()
+                    .Select(dao => Mapper.MapTaskDaoToDto(dao))
                 )
             );
         }
@@ -67,21 +66,21 @@ namespace TodoWebApi.Services.Impl {
         public async Task<TopicDto> GetTopicHandler(Guid Uuid) {
             var topic = (await _topicsCollection.FindAsync(dao => dao.Uuid == Uuid)).FirstOrDefault();
 
-            if(topic == null){
+            if (topic == null) {
                 return null;
             }
             return Mapper.MapTopicDaoToDto(
-                topic, 
+                topic,
                 _tasksCollection
-                    .Find(task => task.TopicUuid == topic.Uuid)
-                    .ToList()
-                    .Select(dao => Mapper.MapTaskDaoToDto(dao)));
+                .Find(task => task.TopicUuid == topic.Uuid)
+                .ToList()
+                .Select(dao => Mapper.MapTaskDaoToDto(dao)));
         }
 
         public async Task<bool> UpdateTopicHandler(Guid Uuid, TopicDto topicDto) {
             var topic = (await _topicsCollection.FindAsync(dao => dao.Uuid == Uuid)).FirstOrDefault();
 
-            if(topic == null) {
+            if (topic == null) {
                 return false;
             }
 
@@ -90,14 +89,14 @@ namespace TodoWebApi.Services.Impl {
             var filter = Builders<TopicDao>.Filter.Eq("Uuid", Uuid);
             var update = Builders<TopicDao>.Update.Set("name", topicDto.Name);
 
-            _topicsCollection.UpdateOne(filter,update);
+            _topicsCollection.UpdateOne(filter, update);
 
-            foreach(var taskDto in topicDto.Tasks) {
+            foreach (var taskDto in topicDto.Tasks) {
                 var taskDao = Mapper.MapTaskDtoToDao(taskDto);
                 taskDao.TopicUuid = Uuid;
                 taskDao.Uuid = Guid.NewGuid();
-                
-                _tasksCollection.InsertOne( taskDao );
+
+                _tasksCollection.InsertOne(taskDao);
             }
 
             return true;

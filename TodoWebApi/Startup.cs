@@ -26,10 +26,14 @@ namespace TodoWebApi {
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
             services.AddSingleton<ITopicService, TopicServiceImpl>();
+            services.AddSingleton<ITaskService, TaskServiceImpl>();
 
             // requires using Microsoft.Extensions.Options
             services.Configure<DatabaseSettings>(
                 Configuration.GetSection(nameof(DatabaseSettings)));
+            
+            services.AddSingleton<DatabaseSettings>(sp => 
+                sp.GetRequiredService<DatabaseSettings>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

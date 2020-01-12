@@ -8,5 +8,8 @@ namespace TodoWebApi.Dtos {
 
         [JsonProperty(PropertyName = "deadline")]
         public DateTime Deadline { get; set; }
+
+        [JsonProperty(PropertyName = "topic_guid")]
+        public Guid TopicGuid { get; set; }
     }
 }

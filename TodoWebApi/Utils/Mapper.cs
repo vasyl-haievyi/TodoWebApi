@@ -21,14 +21,16 @@ namespace TodoWebApi.Utils {
         public static TodoTaskDao MapTaskDtoToDao(TodoTaskDto taskDto) {
             return new TodoTaskDao {
                 Name = taskDto.Name,
-                Deadline = taskDto.Deadline
+                Deadline = taskDto.Deadline,
+                TopicUuid = taskDto.TopicGuid
             };
         }
 
         public static TodoTaskDto MapTaskDaoToDto(TodoTaskDao taskDao) {
             return new TodoTaskDto() {
                 Name = taskDao.Name,
-                Deadline = taskDao.Deadline
+                Deadline = taskDao.Deadline,
+                TopicGuid = taskDao.TopicUuid
             };
         }
     }

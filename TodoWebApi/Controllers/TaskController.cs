@@ -11,25 +11,25 @@ using TodoWebApi.Services;
 namespace TodoWebApi.Controllers {
 
     [ApiController]
-    [Route("topics")]
-    public class TopicController : Controller {
+    [Route("tasks")]
+    public class TaskController : Controller {
 
-        private readonly ITopicService _service;
+        private readonly ITaskService _service;
 
-        public TopicController(ITopicService service) {
+        public TaskController(ITaskService service) {
             _service = service;
         }
 
         [HttpGet]
-        private async Task<IActionResult> GetAllTopics() {
-            var result = await _service.GetAllTopicsHandler();
+        private async Task<IActionResult> GetAllTasks() {
+            var result = await _service.GetAllTasksHandler();
             return Ok(result); 
         }
 
         [HttpGet]
         [Route("{Uuid}")]
-        private async Task<IActionResult> GetTopic( [FromRoute][Required] Guid Uuid) {
-            var result = await _service.GetTopicHandler(Uuid);
+        private async Task<IActionResult> GetTask( [FromRoute][Required] Guid Uuid) {
+            var result = await _service.GetTaskHandler(Uuid);
 
             if(result == null) {
                 return NotFound(); 
@@ -38,18 +38,18 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpPost]
-        private async Task<IActionResult> CreateTopic([FromBody][Required] TopicDto topicDto) {
-            await _service.CreateTopicHandler(topicDto);
+        private async Task<IActionResult> CreateTopic([FromBody][Required] TodoTaskDto taskDto) {
+            await _service.CreateTaskHandler(taskDto);
 
             return Ok();
         }
 
         [HttpPut]
         [Route("{Uuid}")]
-        private async Task<ActionResult> UpdateTopic(
+        private async Task<IActionResult> UpdateTask(
             [FromRoute][Required] Guid Uuid,
-            [FromBody][Required] TopicDto topicDto) {
-            if ( ! await _service.UpdateTopicHandler(Uuid, topicDto) ) {
+            [FromBody][Required] TodoTaskDto taskDto) {
+            if ( ! await _service.UpdateTaskHandler(Uuid, taskDto) ) {
                 return NotFound();
             }
 
@@ -58,8 +58,8 @@ namespace TodoWebApi.Controllers {
 
         [HttpDelete]
         [Route("{Uuid}")]
-        private async Task<ActionResult> DeleteTopic([FromRoute][Required] Guid Uuid) {
-            if ( ! await _service.DeleteTopicHandler(Uuid) ) {
+        private async Task<IActionResult> DeleteTask([FromRoute][Required] Guid Uuid) {
+            if ( ! await _service.DeleteTaskHandler(Uuid) ) {
                 return NotFound();
             }
 
