@@ -7,14 +7,15 @@ namespace TodoWebApi.Utils {
     public static class Mapper {
         public static TopicDao MapTopicDtoToDao(TopicDto dto) {
             return new TopicDao() {
-                Name = dto.Name
+                Name = dto.Name,
+                Uuid = dto.Uuid
             };
         }
 
-        public static TopicDto MapTopicDaoToDto(TopicDao dao, IEnumerable<TodoTaskDto> taskDtos) {
+        public static TopicDto MapTopicDaoToDto(TopicDao dao) {
             return new TopicDto() {
                 Name = dao.Name,
-                Tasks = taskDtos
+                Uuid = dao.Uuid
             };
         }
 
@@ -22,7 +23,8 @@ namespace TodoWebApi.Utils {
             return new TodoTaskDao {
                 Name = taskDto.Name,
                 Deadline = taskDto.Deadline,
-                TopicUuid = taskDto.TopicGuid
+                TopicUuid = taskDto.TopicUuid,
+                Uuid = taskDto.Uuid
             };
         }
 
@@ -30,7 +32,8 @@ namespace TodoWebApi.Utils {
             return new TodoTaskDto() {
                 Name = taskDao.Name,
                 Deadline = taskDao.Deadline,
-                TopicGuid = taskDao.TopicUuid
+                TopicUuid = taskDao.TopicUuid,
+                Uuid = taskDao.Uuid
             };
         }
     }

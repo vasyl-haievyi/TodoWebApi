@@ -11,7 +11,7 @@ using TodoWebApi.Services;
 namespace TodoWebApi.Controllers {
 
     [ApiController]
-    [Route("tasks")]
+    [Route("/tasks")]
     public class TaskController : Controller {
 
         private readonly ITaskService _service;
@@ -21,14 +21,14 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpGet]
-        private async Task<IActionResult> GetAllTasks() {
+        public async Task<IActionResult> GetAllTasks() {
             var result = await _service.GetAllTasksHandler();
             return Ok(result); 
         }
 
         [HttpGet]
         [Route("{Uuid}")]
-        private async Task<IActionResult> GetTask( [FromRoute][Required] Guid Uuid) {
+        public async Task<IActionResult> GetTask( [FromRoute][Required] Guid Uuid) {
             var result = await _service.GetTaskHandler(Uuid);
 
             if(result == null) {
@@ -38,32 +38,34 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpPost]
-        private async Task<IActionResult> CreateTopic([FromBody][Required] TodoTaskDto taskDto) {
-            await _service.CreateTaskHandler(taskDto);
+        public async Task<IActionResult> CreateTopic([FromBody][Required] TodoTaskDto taskDto) {
+            var result = await _service.CreateTaskHandler(taskDto);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPut]
         [Route("{Uuid}")]
-        private async Task<IActionResult> UpdateTask(
+        public async Task<IActionResult> UpdateTask(
             [FromRoute][Required] Guid Uuid,
             [FromBody][Required] TodoTaskDto taskDto) {
-            if ( ! await _service.UpdateTaskHandler(Uuid, taskDto) ) {
+            var result =  await _service.UpdateTaskHandler(Uuid, taskDto);
+            if ( result == null) {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpDelete]
         [Route("{Uuid}")]
-        private async Task<IActionResult> DeleteTask([FromRoute][Required] Guid Uuid) {
-            if ( ! await _service.DeleteTaskHandler(Uuid) ) {
+        public async Task<IActionResult> DeleteTask([FromRoute][Required] Guid Uuid) {
+            var result = await _service.DeleteTaskHandler(Uuid);
+            if (result == null) {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

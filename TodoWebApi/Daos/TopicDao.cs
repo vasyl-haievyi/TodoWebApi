@@ -8,6 +8,6 @@ namespace TodoWebApi.Daos {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string Name { get; set; }
-        public Guid Uuid { get; set; }
+        public Guid? Uuid { get; set; }
     }
 }

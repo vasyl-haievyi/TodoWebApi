@@ -11,7 +11,7 @@ using TodoWebApi.Services;
 namespace TodoWebApi.Controllers {
 
     [ApiController]
-    [Route("topics")]
+    [Route("/topics")]
     public class TopicController : Controller {
 
         private readonly ITopicService _service;
@@ -21,14 +21,14 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpGet]
-        private async Task<IActionResult> GetAllTopics() {
+        public async Task<ActionResult<IEnumerable<TopicDto>>> GetAllTopics() {
             var result = await _service.GetAllTopicsHandler();
             return Ok(result); 
         }
 
         [HttpGet]
         [Route("{Uuid}")]
-        private async Task<IActionResult> GetTopic( [FromRoute][Required] Guid Uuid) {
+        public async Task<ActionResult<TopicDto>> GetTopic( [FromRoute][Required] Guid Uuid) {
             var result = await _service.GetTopicHandler(Uuid);
 
             if(result == null) {
@@ -38,7 +38,7 @@ namespace TodoWebApi.Controllers {
         }
 
         [HttpPost]
-        private async Task<IActionResult> CreateTopic([FromBody][Required] TopicDto topicDto) {
+        public async Task<ActionResult<TopicDto>> CreateTopic([FromBody][Required] TopicDto topicDto) {
             await _service.CreateTopicHandler(topicDto);
 
             return Ok();
@@ -46,24 +46,27 @@ namespace TodoWebApi.Controllers {
 
         [HttpPut]
         [Route("{Uuid}")]
-        private async Task<ActionResult> UpdateTopic(
+        public async Task<ActionResult<TopicDto>> UpdateTopic(
             [FromRoute][Required] Guid Uuid,
             [FromBody][Required] TopicDto topicDto) {
-            if ( ! await _service.UpdateTopicHandler(Uuid, topicDto) ) {
+            var res = await _service.UpdateTopicHandler(Uuid, topicDto);
+            if ( res == null ) {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(res);
         }
 
         [HttpDelete]
         [Route("{Uuid}")]
-        private async Task<ActionResult> DeleteTopic([FromRoute][Required] Guid Uuid) {
-            if ( ! await _service.DeleteTopicHandler(Uuid) ) {
+        public async Task<ActionResult<TopicDto>> DeleteTopic([FromRoute][Required] Guid Uuid) {
+
+            var res = await _service.DeleteTopicHandler(Uuid);
+            if ( res == null ) {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(res);
         }
     }
 }

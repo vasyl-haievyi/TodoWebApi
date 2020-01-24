@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using TodoWebApi.Services;
 using TodoWebApi.Services.Impl;
 using TodoWebApi.Properties;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace TodoWebApi {
     public class Startup {
@@ -24,16 +25,19 @@ namespace TodoWebApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            
+            services
+                .AddControllers()
+                .AddNewtonsoftJson();
+
             services.AddSingleton<ITopicService, TopicServiceImpl>();
             services.AddSingleton<ITaskService, TaskServiceImpl>();
 
+            services
+                .AddMvc()
+                .AddNewtonsoftJson();
             // requires using Microsoft.Extensions.Options
-            services.Configure<DatabaseSettings>(
-                Configuration.GetSection(nameof(DatabaseSettings)));
-            
-            services.AddSingleton<DatabaseSettings>(sp => 
-                sp.GetRequiredService<DatabaseSettings>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

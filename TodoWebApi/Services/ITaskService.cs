@@ -8,8 +8,8 @@ namespace TodoWebApi.Services {
     public interface ITaskService {
         Task<IEnumerable<TodoTaskDto>> GetAllTasksHandler();
         Task<TodoTaskDto> GetTaskHandler(Guid Uuid);
-        Task CreateTaskHandler(TodoTaskDto taskDto);
-        Task<bool> UpdateTaskHandler(Guid Uuid, TodoTaskDto taskDto);
-        Task<bool> DeleteTaskHandler(Guid Uuid);
+        Task<TodoTaskDto> CreateTaskHandler(TodoTaskDto taskDto);
+        Task<TodoTaskDto> UpdateTaskHandler(Guid Uuid, TodoTaskDto taskDto);
+        Task<TodoTaskDto> DeleteTaskHandler(Guid Uuid);
     }
 }
